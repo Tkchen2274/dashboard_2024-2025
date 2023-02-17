@@ -16,7 +16,7 @@ void setup () {
     digitalWrite (LED_BUILTIN, !digitalRead (LED_BUILTIN)) ;
   }
   Serial.println ("CAN1 loopback test") ;
-  ACAN_T4_Settings settings (500 * 1000) ; // 500 kbit/s
+  ACAN_T4_Settings settings (125 * 1000) ; // 125 kbit/s
   settings.mLoopBackMode = false ;
   settings.mSelfReceptionMode = false ;
   const uint32_t errorCode = ACAN_T4::can1.begin (settings) ;
