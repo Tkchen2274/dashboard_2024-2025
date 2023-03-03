@@ -65,25 +65,50 @@ static uint32_t gSentCount = 0 ;
 static uint32_t gReceivedCount = 0 ;
 
 //-----------------------------------------------------------------
-
+/*
+ * Tests the communication of the CAN lines on the Teensy4.1
+ * Bus1 will send messages while Bus2 will receive messages
+ * If the bus line is correctly set up, the terminal will display
+ * incrementing values for the gSend and gReceived counts.
+ * The code is pretty self explanatory, but there are added 
+ * comments to guide understanding
+ */
+ 
 void loop () {
   if (gBlinkDate <= millis ()) {
     gBlinkDate += 500 ;
     digitalWrite (LED_BUILTIN, !digitalRead (LED_BUILTIN)) ;
   }
+  // Initialize CAN message
+  // The settings of the message are declared above
+  // the loop()
   CANMessage message ;
+
+  
   if (gSendDate <= millis ()) {
+    
+    // Declared message ID
     message.id = 0x542 ;
+    
+    // Attempts to send on bus 1
     const bool ok = ACAN_T4::can1.tryToSend (message) ;
+    
     if (ok) {
       gSendDate += 2000 ;
       gSentCount += 1 ;
+      
+      // print to the terminal
       Serial.print ("Sent: ") ;
       Serial.println (gSentCount) ;
     }
   }
+  // Attemtps to read on bus 2
   if (ACAN_T4::can2.receive (message)) {
+    
+    // increment received count
     gReceivedCount += 1 ;
+    
+    // print to the terminal
     Serial.print ("Received: ") ;
     Serial.println (gReceivedCount) ;
   }
