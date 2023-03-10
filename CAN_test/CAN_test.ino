@@ -5,8 +5,15 @@
 //-----------------------------------------------------------------
 
 #include <ACAN_T4.h>
+#include <USBHost_t36.h>
 
 //-----------------------------------------------------------------
+
+// initialization
+// USBHost myusb;
+int greenPin =  2;
+int redPin = 3;
+int speakerPin = 12;
 
 void setup () {
   pinMode (LED_BUILTIN, OUTPUT) ;
@@ -14,6 +21,12 @@ void setup () {
   while (!Serial) {
     delay (50) ;
     digitalWrite (LED_BUILTIN, !digitalRead (LED_BUILTIN)) ;
+
+  // pin
+  pinMode(greenPin, OUTPUT);
+  pinMode(redPin, OUTPUT);
+  pinMode(speakerPin, OUTPUT);
+  
   }
   Serial.println ("CAN1 loopback test") ;
   ACAN_T4_Settings settings (125 * 1000) ; // 125 kbit/s
@@ -75,6 +88,12 @@ static uint32_t gReceivedCount = 0 ;
  */
  
 void loop () {
+
+  digitalWrite(greenPin, HIGH);
+  digitalWrite(redPin, HIGH);
+  digitalWrite(speakerPin, HIGH);
+
+  
   if (gBlinkDate <= millis ()) {
     gBlinkDate += 500 ;
     digitalWrite (LED_BUILTIN, !digitalRead (LED_BUILTIN)) ;
@@ -111,5 +130,7 @@ void loop () {
     // print to the terminal
     Serial.print ("Received: ") ;
     Serial.println (gReceivedCount) ;
+ 
   }
+
 }
