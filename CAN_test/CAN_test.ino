@@ -9,21 +9,30 @@
 
 //-----------------------------------------------------------------
 
-// initialization
+// initialization of output pins
 // USBHost myusb;
+// greenPin = 10;
+// redPin = 3; 
+
+IntervalTimer myTimer;
 int greenPin =  2;
 int redPin = 3;
 int speakerPin = 12;
+int ledState = LOW;
+volatile unsigned long blinkCount = 0; // use volatile for shared variables
 
 void setup () {
-  pinMode (LED_BUILTIN, OUTPUT) ;
+  pinMode (greenPin, OUTPUT) ;
   Serial.begin (9600) ;
+  // testing 
+  // myTimer.begin(blinkLED, 150000);  // blinkLED to run every 0.15 seconds
+  
   while (!Serial) {
     delay (50) ;
     digitalWrite (LED_BUILTIN, !digitalRead (LED_BUILTIN)) ;
 
   // pin
-  pinMode(greenPin, OUTPUT);
+  // pinMode(greenPin, OUTPUT);
   pinMode(redPin, OUTPUT);
   pinMode(speakerPin, OUTPUT);
   
@@ -70,6 +79,15 @@ void setup () {
   }
 }
 
+void blinkLED() {
+  if (ledState == LOW) {
+    ledState = HIGH;
+    blinkCount = blinkCount + 1;  // increase when LED turns on
+  } else {
+    ledState = LOW;
+  }
+  digitalWrite(greenPin, ledState);
+}
 //-----------------------------------------------------------------
 
 static uint32_t gBlinkDate = 0 ;
@@ -86,9 +104,25 @@ static uint32_t gReceivedCount = 0 ;
  * The code is pretty self explanatory, but there are added 
  * comments to guide understanding
  */
- 
+
+int counter = 0;
+bool yay = true;
+bool startCount = false;
 void loop () {
 
+  
+//  if(yay){
+//    myTimer.begin(blinkLED, 150000);  // blinkLED to run every 0.15 seconds
+//    startCount = true;
+//    yay = false;
+//  }
+//  if(startCount = true){
+//    counter++
+//    if(counter == 100000){
+//      
+//    }
+//  }
+  // digitalWrite(2,HIGH);
   digitalWrite(greenPin, HIGH);
   digitalWrite(redPin, HIGH);
   digitalWrite(speakerPin, HIGH);
@@ -98,6 +132,8 @@ void loop () {
     gBlinkDate += 500 ;
     digitalWrite (LED_BUILTIN, !digitalRead (LED_BUILTIN)) ;
   }
+
+  
   // Initialize CAN message
   // The settings of the message are declared above
   // the loop()
