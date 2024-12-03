@@ -7,6 +7,15 @@ int i = 0;
 int speed[5] = {1, 2, 3, 4, 5};
 int bat[5] = {100, 99, 98, 97 ,96};
 int temp[5] = {37, 38, 39, 40, 41};
+int state;
+
+// convention for messages: source_dest_label
+
+CAN_message_t dash_vcu_buzzPlayed;
+dash_vcu_buzzPlayed.id = 0x110;
+dash_vcu_buzzPlayed[0] = 0x1;
+
+CAN_message_t vcu_dash_playBuzz; 
 
 void setup() {
   // Start serial communication with Nextion display
@@ -36,31 +45,52 @@ void loop() {
   sendNumberToNextion("numtemp", temp[i]);
   sendNumberToNextion("t4", ctof(temp[i]));
 
-   CAN_message_t rxMsg; // Message object to store received CAN data
 
-  // Check if a new CAN message has been received
-  if (CANbus.read(rxMsg)) {
-    bool buzz = false;
-    if (rxMsg[1] == 0x902) {
-      buzz = true;
+  /* 
+    Check if received the buzzer message from VCU 
+    if so, then forward the state and call fxn:
+    'sendResponse(blah,blah)'
+  */
+  if (CANbus.read(vcu_dash_playBuzz)) {
+    if (vcu_dash_playBuzz.id == 0x109 && vcu_dash_playBuzz[0] == 0x1) {
+      state = vcu_dash_playBuzz[1];  
+      buzz_played_response(state);
     }
-    // sendResponse(rxMsg, rxMsg[1] == 0x902);
-    sendResponse(rxMsg, buzz);
   }
 
   // Delay for a second
-  //delay(1000);  delay used for dashboard refresh
+  // delay(1000);  delay used for dashboard refresh
 }
+
+/*
+  ctof(): 
+    celcius to farenheit 
+  Args: 
+    c (int): celcius input 
+  Returns:
+    float: gives back the farenheit value
+*/
 
 float ctof (int c) {
   return c*1.8 + 32;
 }
 
-// Function to send a number to a Nextion component
+/* 
+  sendNumberToNextion(): 
+    Function to send a number to a Nextion component
+
+  Args: 
+    component (String): first parameter
+      specify which component you are sending to  
+    value     (float) : second parameter
+      value to show on display
+  Returns:
+    void 
+*/
+
 void sendNumberToNextion(String component, float value) {
   // Send the command to update the text component with the value
-  Serial.println(value);     // Component name, e.g., "t0"
-
+  Serial.println(value);        // Component name, e.g., "t0"
   Serial2.print(component);     // Component name, e.g., "t0"
   Serial2.print(".txt=\"");     // For a text field
   Serial2.print(value);         // Value to display
@@ -69,16 +99,35 @@ void sendNumberToNextion(String component, float value) {
   sendEndCommand();
 }
 
-void sendResponse(CAN_message_t rxMsg, bool buzz) {
-  CANbus.write(rxMsg);
-  if (buzz) {
-    int buzzer = 0x903; // or another number, unique for use
-    CANbus.write(buzzer); // some code to make buzz
-    Serial.write(Buzzed); // Validation passed
+/* 
+  buzz_played_response(): 
+    Sends a message to the VCU that the buzzer has been played 
+
+  Args: 
+    state (int): first parameter
+      takes the state of the recieved message and sends it back
+  Returns:
+    void 
+*/
+
+void buzz_played_response(int state) {
+  dash_vcu_buzzPlayed[1] = buzz;
+  CANbus.write(dash_vcu_buzzPlayed); // some code to make buzz
+  Serial.write("sent buzz message validation"); // Validation passed
   }
 }
 
-// Function to send the end command required by Nextion
+/* 
+  sendEndCommand(): 
+    Function to send the end command required by Nextion Protocol
+
+  Args: 
+    empty
+
+  Returns:
+    void 
+*/
+
 void sendEndCommand() {
   Serial.write(0xFF);  // End of command character (0xFF) sent three times
   Serial.write(0xFF);
