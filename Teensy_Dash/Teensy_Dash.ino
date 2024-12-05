@@ -21,6 +21,8 @@ void setup() {
 }
 
 void loop() {
+
+  // can1.write(msg);
   if(can1.read(msg)){
     Serial.print("CAN1 ");
     Serial.print("MB: "); Serial.print(msg.mb);
@@ -35,7 +37,7 @@ void loop() {
     HWSERIAL.print("numbattery.txt=\"" + String(msg.buf[0]) + "\""); //changes the speedometer 
     HWSERIAL.write("\xFF\xFF\xFF");
   }else{
-    Serial.print("no work can 1 \n");
+    // Serial.print("no work can 1 \n");
   }
   if ( can2.read(msg2) ) {
     Serial.print("CAN2 ");
@@ -51,6 +53,6 @@ void loop() {
     HWSERIAL.print("numspeed.txt=\"" + String(msg2.buf[0]) + "\""); //changes the speedometer 
     HWSERIAL.write("\xFF\xFF\xFF");
   }else{
-    Serial.print("no work can 2");
+    // Serial.print("no work can 2");
   }
 }
