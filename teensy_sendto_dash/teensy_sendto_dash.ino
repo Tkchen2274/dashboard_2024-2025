@@ -47,7 +47,7 @@ void loop() {
   }
 
   // Send the number to a text component (e.g., "t0" on the Nextion)
-  sendNumberToNextion("t0", 666);
+  // sendNumberToNextion("t0", 666); // this is not to be changed. However, the down left name have to be changed to Motor Temp (C)
   sendNumberToNextion("numbattery", bat[i]);
   sendNumberToNextion("numspeed", speed[i]);
   sendNumberToNextion("numtemp", temp[i]);
