@@ -1,4 +1,9 @@
+// #include <FlexCAN.h>
 #include <FlexCAN.h>
+/*
+  12/02/24 Need to handle receive messages from can to update the dashboard
+
+*/
 
 // Define the CAN bus settings
 FlexCAN CANbus(500000);  // CAN bus speed: 500 kbps
@@ -9,17 +14,17 @@ int bat[5] = {100, 99, 98, 97 ,96};
 int temp[5] = {37, 38, 39, 40, 41};
 int state;
 
-// convention for messages: source_dest_label
-
+// convention for CAN messages: source_dest_label
 CAN_message_t dash_vcu_buzzPlayed;
-dash_vcu_buzzPlayed.id = 0x110;
-dash_vcu_buzzPlayed[0] = 0x1;
 
+// used to recieve the temp value
+// you might need to change this in a fat 
+// if loop to sift through the messages
 CAN_message_t vcu_dash_playBuzz; 
 
 void setup() {
   // Start serial communication with Nextion display
-  //Serial.begin(9600);
+  // Serial.begin(9600);
   Serial2.begin(9600);    // RXTX
 
   // Can communication
@@ -30,6 +35,9 @@ void setup() {
   // Start the CAN bus
   CANbus.begin();
   Serial.println("CAN Bus initialized.");
+
+  dash_vcu_buzzPlayed.id = 0x110;
+  dash_vcu_buzzPlayed.buf[0] = 0x1;
 }
 
 void loop() {
@@ -52,8 +60,8 @@ void loop() {
     'sendResponse(blah,blah)'
   */
   if (CANbus.read(vcu_dash_playBuzz)) {
-    if (vcu_dash_playBuzz.id == 0x109 && vcu_dash_playBuzz[0] == 0x1) {
-      state = vcu_dash_playBuzz[1];  
+    if (vcu_dash_playBuzz.id == 0x109 && vcu_dash_playBuzz.buf[0] == 0x1) {
+      state = vcu_dash_playBuzz.buf[1];  
       buzz_played_response(state);
     }
   }
@@ -111,11 +119,10 @@ void sendNumberToNextion(String component, float value) {
 */
 
 void buzz_played_response(int state) {
-  dash_vcu_buzzPlayed[1] = buzz;
+  dash_vcu_buzzPlayed.buf[1] = state;
   CANbus.write(dash_vcu_buzzPlayed); // some code to make buzz
   Serial.write("sent buzz message validation"); // Validation passed
   }
-}
 
 /* 
   sendEndCommand(): 
