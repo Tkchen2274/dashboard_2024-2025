@@ -8,10 +8,12 @@
 // Define the CAN bus settings
 FlexCAN CANbus(500000);  // CAN bus speed: 500 kbps
 
+//speed, battery percetage, motor temp, motor controller temperature?
 int i = 0;
-int speed[5] = {1, 2, 3, 4, 5};
-int bat[5] = {100, 99, 98, 97 ,96};
-int temp[5] = {37, 38, 39, 40, 41};
+int speed = 0;
+int motor_temperature = 0;
+int motor_controller_temperature = 0;
+int battery_percentage = 0;
 int state;
 
 // convention for CAN messages: source_dest_label
@@ -20,7 +22,9 @@ CAN_message_t dash_vcu_buzzPlayed;
 // used to recieve the temp value
 // you might need to change this in a fat 
 // if loop to sift through the messages
-CAN_message_t vcu_dash_playBuzz; 
+CAN_message_t incoming_message; 
+
+// CAN message from 
 
 void setup() {
   // Start serial communication with Nextion display
@@ -41,17 +45,13 @@ void setup() {
 }
 
 void loop() {
-  i++;
-  if (i == 5) {
-    i = 0;
-  }
 
   // Send the number to a text component (e.g., "t0" on the Nextion)
   // sendNumberToNextion("t0", 666); // this is not to be changed. However, the down left name have to be changed to Motor Temp (C)
-  sendNumberToNextion("numbattery", bat[i]);
-  sendNumberToNextion("numspeed", speed[i]);
-  sendNumberToNextion("numtemp", temp[i]);
-  sendNumberToNextion("t4", ctof(temp[i]));
+  sendNumberToNextion("numbattery", battery_percentage);
+  sendNumberToNextion("numspeed", speed);
+  sendNumberToNextion("numtemp", ctof(motor_temperature));
+  sendNumberToNextion("t4", ctof(motor_controller_temperature));
 
 
   /* 
@@ -59,12 +59,20 @@ void loop() {
     if so, then forward the state and call fxn:
     'sendResponse(blah,blah)'
   */
-  if (CANbus.read(vcu_dash_playBuzz)) {
-    if (vcu_dash_playBuzz.id == 0x109 && vcu_dash_playBuzz.buf[0] == 0x1) {
-      state = vcu_dash_playBuzz.buf[1];  
+  if (CANbus.read(incoming_message)) {
+    if (incoming_message.id == 0x109 && incoming_message.buf[0] == 0x1) {
+      state = incoming_message.buf[1];  
       buzz_played_response(state);
     }
+    else if (incoming_message.id == 0x203){
+      speed = incoming_message.buf[0];
+      motor_temperature = incoming_message.buf[1];
+      battery_percentage = incoming_message.buf[2];
+      motor_controller_temperature = incoming_message.buf[3];
+    }
   }
+
+
 
   // Delay for a second
   // delay(1000);  delay used for dashboard refresh
