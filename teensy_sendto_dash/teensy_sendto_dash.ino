@@ -104,9 +104,9 @@ float ctof (int c) {
     void 
 */
 
+// Function to send a number to a Nextion component
 void sendNumberToNextion(String component, float value) {
   // Send the command to update the text component with the value
-  Serial.println(value);        // Component name, e.g., "t0"
   Serial2.print(component);     // Component name, e.g., "t0"
   Serial2.print(".txt=\"");     // For a text field
   Serial2.print(value);         // Value to display
@@ -142,6 +142,8 @@ void buzz_played_response(int state) {
   Returns:
     void 
 */
+
+// Function to send the end command required by Nextion
 
 void sendEndCommand() {
   Serial.write(0xFF);  // End of command character (0xFF) sent three times
