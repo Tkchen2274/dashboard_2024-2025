@@ -54,7 +54,7 @@ void loop() {
     if so, then forward the state and call fxn:
     'sendResponse(blah,blah)'
   */
-  if (CANbus.read(incoming_message)) {
+  if (can1.read(incoming_message)) {
     if (incoming_message.id == 0x109 && incoming_message.buf[0] == 0x1) {
       state = incoming_message.buf[1];  
       buzz_played_response(state);
