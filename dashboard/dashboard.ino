@@ -1,12 +1,12 @@
 // #include <FlexCAN.h>
-#include <FlexCAN.h>
+#include <FlexCAN_T4.h>
 /*
   12/02/24 Need to handle receive messages from can to update the dashboard
 
 */
 
 // Define the CAN bus settings
-FlexCAN CANbus(500000);  // CAN bus speed: 500 kbps
+FlexCAN_T4<CAN1, RX_SIZE_256, TX_SIZE_16> can1;
 
 //speed, battery percetage, motor temp, motor controller temperature?
 int i = 0;
@@ -32,13 +32,8 @@ void setup() {
   Serial2.begin(9600);    // RXTX
 
   // Can communication
-  Serial.begin(115200);   // CAN communication
-  while (!Serial); // Wait for Serial monitor to open
-  Serial.println("Starting CAN Bus...");
-
-  // Start the CAN bus
-  CANbus.begin();
-  Serial.println("CAN Bus initialized.");
+  can1.begin();   // CAN communication
+  can1.setBaudRate(500000); //bit rate of 500kbs
 
   dash_vcu_buzzPlayed.id = 0x110;
   dash_vcu_buzzPlayed.buf[0] = 0x1;
@@ -128,8 +123,8 @@ void sendNumberToNextion(String component, float value) {
 
 void buzz_played_response(int state) {
   dash_vcu_buzzPlayed.buf[1] = state;
-  CANbus.write(dash_vcu_buzzPlayed); // some code to make buzz
-  Serial.write("sent buzz message validation"); // Validation passed
+  can1.write(dash_vcu_buzzPlayed); // some code to make buzz
+  // Serial.write("sent buzz message validation"); // Validation passed
   }
 
 /* 
@@ -146,9 +141,9 @@ void buzz_played_response(int state) {
 // Function to send the end command required by Nextion
 
 void sendEndCommand() {
-  Serial.write(0xFF);  // End of command character (0xFF) sent three times
-  Serial.write(0xFF);
-  Serial.write(0xFF);
+  // Serial.write(0xFF);  // End of command character (0xFF) sent three times
+  // Serial.write(0xFF);
+  // Serial.write(0xFF);
 
   Serial2.write(0xFF);
   Serial2.write(0xFF);
