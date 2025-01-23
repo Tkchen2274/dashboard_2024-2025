@@ -44,8 +44,12 @@ void loop() {
   // Send the number to a text component (e.g., "t0" on the Nextion)
   // sendNumberToNextion("t0", 666); // this is not to be changed. However, the down left name have to be changed to Motor Temp (C)
   
+  // // Debug info
+  // Serial.println("Sending something");
+  // Serial2.print(12345);
+  // Serial2.write(0xFF);
   
-  Serial.println("Now Sending..."); // See on Teensy end if it is sending now
+  // Serial.println("Now Sending..."); // See on Teensy end if it is sending now
   Serial.print("Battery: ");
   Serial.println(battery_percentage);
 
