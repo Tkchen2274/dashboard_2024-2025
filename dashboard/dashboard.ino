@@ -43,11 +43,25 @@ void loop() {
 
   // Send the number to a text component (e.g., "t0" on the Nextion)
   // sendNumberToNextion("t0", 666); // this is not to be changed. However, the down left name have to be changed to Motor Temp (C)
+  
+  
+  Serial.println("Now Sending..."); // See on Teensy end if it is sending now
+  Serial.print("Battery: ");
+  Serial.println(battery_percentage);
+
+  Serial.print("Speed: ");
+  Serial.println(speed);
+
+  Serial.print("Temperature: ");
+  Serial.println(ctof(motor_temperature));
+
+  /*
+    Actual Sender
+  */
   sendNumberToNextion("numbattery", battery_percentage);
   sendNumberToNextion("numspeed", speed);
-  sendNumberToNextion("numtemp", ctof(motor_temperature));
+  sendNumberToNextion("numtemp", ctof(motor_temperature)); // why are we using F instead of C?
   sendNumberToNextion("t4", ctof(motor_controller_temperature));
-
 
   /* 
     Check if received the buzzer message from VCU 
