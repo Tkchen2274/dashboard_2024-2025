@@ -2,7 +2,8 @@
 #include <FlexCAN_T4.h>
 /*
   12/02/24 Need to handle receive messages from can to update the dashboard
-
+  01/27/25 Fixed the serial port issue. Tested RX/TX com with Nextion Display.
+  - Need testings on CAN with GEVCU and BMS
 */
 
 // Define the CAN bus settings
