@@ -29,6 +29,11 @@ CAN_message_t incoming_message;
 void setup() {
   // Start serial communication with Nextion display
   // Serial.begin(9600);
+
+  // This set is included to ensure that 7 and 8 are the ideal port used
+  Serial2.setTX(7);
+  Serial2.setRX(8);
+
   Serial2.begin(9600);    // RXTX
 
   // Can communication
@@ -50,14 +55,14 @@ void loop() {
   // Serial2.write(0xFF);
   
   // Serial.println("Now Sending..."); // See on Teensy end if it is sending now
-  Serial.print("Battery: ");
-  Serial.println(battery_percentage);
+  // Serial.print("Battery: ");
+  // Serial.println(battery_percentage);
 
-  Serial.print("Speed: ");
-  Serial.println(speed);
+  // Serial.print("Speed: ");
+  // Serial.println(speed);
 
-  Serial.print("Temperature: ");
-  Serial.println(ctof(motor_temperature));
+  // Serial.print("Temperature: ");
+  // Serial.println(ctof(motor_temperature));
 
   /*
     Actual Sender
