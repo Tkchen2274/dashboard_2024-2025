@@ -56,14 +56,16 @@ void loop() {
   // Serial2.write(0xFF);
   
   // Serial.println("Now Sending..."); // See on Teensy end if it is sending now
-  // Serial.print("Battery: ");
-  // Serial.println(battery_percentage);
+  Serial.println("Now Receiving...");
 
-  // Serial.print("Speed: ");
-  // Serial.println(speed);
+  Serial.print("Battery: ");
+  Serial.println(battery_percentage);
 
-  // Serial.print("Temperature: ");
-  // Serial.println(ctof(motor_temperature));
+  Serial.print("Speed: ");
+  Serial.println(speed);
+
+  Serial.print("Temperature: ");
+  Serial.println(ctof(motor_temperature));
 
   /*
     Actual Sender
