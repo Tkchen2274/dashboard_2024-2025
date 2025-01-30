@@ -31,6 +31,12 @@ void setup() {
   // Start serial communication with Nextion display
   // Serial.begin(9600);
 
+  /*
+    It should be known that Serial is the object for communication with the Serial Monitor function on the Arduino IDE.
+    This Serial output can also be monitored using a python file.
+    Please refer to the readTeensyOutputPython/main.py for more information.
+  */
+
   // This set is included to ensure that 7 and 8 are the ideal port used
   Serial2.setTX(7);
   Serial2.setRX(8);
@@ -56,16 +62,16 @@ void loop() {
   // Serial2.write(0xFF);
   
   // Serial.println("Now Sending..."); // See on Teensy end if it is sending now
-  Serial.println("Now Receiving...");
+  // Serial.println("Now Receiving...");
 
-  Serial.print("Battery: ");
-  Serial.println(battery_percentage);
+  // Serial.print("Battery: ");
+  // Serial.println(battery_percentage);
 
-  Serial.print("Speed: ");
-  Serial.println(speed);
+  // Serial.print("Speed: ");
+  // Serial.println(speed);
 
-  Serial.print("Temperature: ");
-  Serial.println(ctof(motor_temperature));
+  // Serial.print("Temperature: ");
+  // Serial.println(ctof(motor_temperature));
 
   /*
     Actual Sender
@@ -74,6 +80,7 @@ void loop() {
   sendNumberToNextion("numspeed", speed);
   sendNumberToNextion("numtemp", ctof(motor_temperature)); // why are we using F instead of C?
   sendNumberToNextion("t4", ctof(motor_controller_temperature));
+  // As of 2025/01/29, this part of the code has been verified to be working. -Qizhe Yang-
 
   /* 
     Check if received the buzzer message from VCU 
@@ -92,6 +99,7 @@ void loop() {
       motor_controller_temperature = incoming_message.buf[3];
     }
   }
+  // As of 2025/01/29, this part, doubtly the CANBUS, is not working.
 
 
 
