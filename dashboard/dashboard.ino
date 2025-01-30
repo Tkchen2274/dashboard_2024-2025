@@ -37,7 +37,8 @@ void setup() {
     Please refer to the readTeensyOutputPython/main.py for more information.
   */
 
-  // This set is included to ensure that 7 and 8 are the ideal port used
+  // This set is included to ensure 
+  // that 7 and 8 are the ideal port used
   Serial2.setTX(7);
   Serial2.setRX(8);
 
@@ -100,7 +101,7 @@ void loop() {
     }
   }
   // As of 2025/01/29, this part, doubtly the CANBUS, is not working.
-
+  // This might not have a problem, but just need the external CAN module on the teensy to work
 
 
   // Delay for a second
