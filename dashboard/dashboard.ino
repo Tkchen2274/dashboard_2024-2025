@@ -1,3 +1,12 @@
+/*
+  This is the ULTIMATE program for Teensy.
+  Teensy is the communicator between GEVCU and Nextion Display.
+  Teensy is connected to the display using RX/TX, pin 8 and 7 respectively.
+  When connecting Teensy and display, connect Teensy RX to display TX and vice versa.
+  Teensy is connected to the GEVCU using CAN bridge.
+  Please refer to Systems Electric for CANBUS.
+*/
+
 // #include <FlexCAN.h>
 #include <FlexCAN_T4.h>
 /*
