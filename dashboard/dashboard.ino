@@ -48,11 +48,11 @@ void setup() {
 
   // This set is included to ensure 
   // that 7 and 8 are the ideal port used
-  Serial2.setTX(14);
-  Serial2.setRX(15);
+  // Serial2.setTX(14);
+  // Serial2.setRX(15);
   // unsure if 14, 15 is serial3
 
-  Serial2.begin(9600);    // RXTX
+  Serial3.begin(9600);    // RXTX
 
   // Can communication
   can1.begin();   // CAN communication
@@ -72,21 +72,21 @@ void loop() {
   // Serial2.print(12345);
   // Serial2.write(0xFF);
 
-  if (HWSERIAL.available()) { // added boolean
+  // if (Serial.available()) { // added boolean
   
-    Serial.println("Now Sending..."); // See on Teensy end if it is sending now
-    Serial.println("Now Receiving...");
+  //   Serial.println("Now Sending..."); // See on Teensy end if it is sending now
+  //   Serial.println("Now Receiving...");
 
-    Serial.print("Battery: ");
-    Serial.println(battery_percentage);
+  //   Serial.print("Battery: ");
+  //   Serial.println(battery_percentage);
 
-    Serial.print("Speed: ");
-    Serial.println(speed);
+  //   Serial.print("Speed: ");
+  //   Serial.println(speed);
 
-    Serial.print("Temperature: ");
-    Serial.println(ctof(motor_temperature));
+  //   Serial.print("Temperature: ");
+  //   Serial.println(ctof(motor_temperature));
 
-  }
+  // }
 
   /*
     Actual Sender
@@ -151,10 +151,10 @@ float ctof (int c) {
 // Function to send a number to a Nextion component
 void sendNumberToNextion(String component, float value) {
   // Send the command to update the text component with the value
-  Serial2.print(component);     // Component name, e.g., "t0"
-  Serial2.print(".txt=\"");     // For a text field
-  Serial2.print(value);         // Value to display
-  Serial2.print("\"");          // End the string value
+  Serial3.print(component);     // Component name, e.g., "t0"
+  Serial3.print(".txt=\"");     // For a text field
+  Serial3.print(value);         // Value to display
+  Serial3.print("\"");          // End the string value
 
   sendEndCommand();
 }
@@ -194,7 +194,7 @@ void sendEndCommand() {
   // Serial.write(0xFF);
   // Serial.write(0xFF);
 
-  Serial2.write(0xFF);
-  Serial2.write(0xFF);
-  Serial2.write(0xFF);
+  Serial3.write(0xFF);
+  Serial3.write(0xFF);
+  Serial3.write(0xFF);
 }
