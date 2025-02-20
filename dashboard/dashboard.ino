@@ -48,8 +48,9 @@ void setup() {
 
   // This set is included to ensure 
   // that 7 and 8 are the ideal port used
-  Serial2.setTX(7);
-  Serial2.setRX(8);
+  Serial2.setTX(14);
+  Serial2.setRX(15);
+  // unsure if 14, 15 is serial3
 
   Serial2.begin(9600);    // RXTX
 
@@ -70,18 +71,22 @@ void loop() {
   // Serial.println("Sending something");
   // Serial2.print(12345);
   // Serial2.write(0xFF);
+
+  if (HWSERIAL.available()) { // added boolean
   
-  // Serial.println("Now Sending..."); // See on Teensy end if it is sending now
-  // Serial.println("Now Receiving...");
+    Serial.println("Now Sending..."); // See on Teensy end if it is sending now
+    Serial.println("Now Receiving...");
 
-  // Serial.print("Battery: ");
-  // Serial.println(battery_percentage);
+    Serial.print("Battery: ");
+    Serial.println(battery_percentage);
 
-  // Serial.print("Speed: ");
-  // Serial.println(speed);
+    Serial.print("Speed: ");
+    Serial.println(speed);
 
-  // Serial.print("Temperature: ");
-  // Serial.println(ctof(motor_temperature));
+    Serial.print("Temperature: ");
+    Serial.println(ctof(motor_temperature));
+
+  }
 
   /*
     Actual Sender
